@@ -32,12 +32,14 @@ def require_admin(f):
     return decorated
 
 def register_routes(app):
+    from app import limiter
     
     @app.route('/')
     def index():
         return render_template('docs.html')
     
     @app.route('/send', methods=['POST'])
+    @limiter.limit("60 per minute")
     @require_api_key
     def send_message():
         try:
