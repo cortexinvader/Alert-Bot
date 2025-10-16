@@ -12,7 +12,7 @@ runButton = "Project"
 [[workflows.workflow]]
 name = "Project"
 mode = "parallel"
-author = "agent"
+author = ""
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
@@ -20,7 +20,7 @@ args = "AlertBot Server"
 
 [[workflows.workflow]]
 name = "AlertBot Server"
-author = "agent"
+author = ""
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
