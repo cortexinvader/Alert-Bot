@@ -5,13 +5,21 @@ from app.utils import load_env_encrypted
 def send_facebook(recipient: str, message: str) -> dict:
     try:
         token = load_env_encrypted('FACEBOOK_PAGE_TOKEN', '')
-        url = f"https://graph.facebook.com/v12.0/me/messages"
+        url = f"https://graph.facebook.com/v22.0/me/messages"
         
+        formatted_message = (
+            f"╭──⦿【 💬 NEW MESSAGE 】\n"
+            f"│ 👤 From: AlertBot\n"
+            f"│ 📨 Message:\n"
+            f"│ {message}\n"
+            f"│\n"
+            f"│ ⚡ Powered by AlertBot\n"
+            f"╰──────⦿"
+        )
+
         payload = {
             "recipient": {"id": recipient},
-            "message": {
-                "text": f"{message}\n\nPowered by AlertBot"
-            }
+            "message": {"text": formatted_message}
         }
         
         response = requests.post(
@@ -34,11 +42,26 @@ def handle_facebook_webhook(data: dict) -> dict:
     if 'postback' in messaging:
         payload = messaging['postback'].get('payload')
         if payload == 'GET_STARTED':
-            return send_facebook(sender_id, f"Welcome to AlertBot!\nYour PSID: {sender_id}\nUse this PSID in your API calls.")
+            welcome_message = (
+                f"╭──⦿【 ⚡ ALERTBOT 】\n"
+                f"│ 👋 Welcome to AlertBot!\n"
+                f"│ 🧠 Your PSID: {sender_id}\n"
+                f"│ 📡 Use this PSID in your API calls.\n"
+                f"│ ⚙️ System: Facebook Messenger v1.0\n"
+                f"╰───────⦿"
+            )
+            return send_facebook(sender_id, welcome_message)
     
     if 'message' in messaging:
         text = messaging['message'].get('text', '')
         if text.lower() == '/getpsid':
-            return send_facebook(sender_id, f"Your PSID: {sender_id}\nUse this PSID in your API calls.")
+            psid_message = (
+                f"╭──⦿【 🪪 PSID DETAILS 】\n"
+                f"│ 👤 Your PSID: {sender_id}\n"
+                f"│ 🌐 Use this PSID in your API calls.\n"
+                f"│ ⚡ Powered by AlertBot\n"
+                f"╰───────⦿"
+            )
+            return send_facebook(sender_id, psid_message)
     
     return {"status": "ignored", "details": "Message ignored"}
