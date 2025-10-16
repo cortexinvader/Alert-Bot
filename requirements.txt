@@ -8,13 +8,4 @@ pybind11==2.11.1
 APScheduler==3.10.4
 gunicorn==21.2.0
 Werkzeug==3.0.1
-APScheduler
-Flask
-Flask-Cors
-gunicorn
-pybind11
-python-dotenv
-python-telegram-bot
-requests
-SQLAlchemy
-Werkzeug
+psycopg2-binary==2.9.11

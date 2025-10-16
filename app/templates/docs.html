@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlertBot API Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #00d4ff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            margin: 40px 0;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            background: linear-gradient(90deg, #00d4ff, #0088ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #00d4ff;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+        h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #00d4ff;
+            padding-bottom: 10px;
+        }
+        .endpoint {
+            background: rgba(0, 50, 100, 0.3);
+            padding: 15px;
+            border-left: 4px solid #00d4ff;
+            margin: 15px 0;
+        }
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        pre {
+            margin: 0;
+            padding: 15px;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+        }
+        .channel-badge {
+            display: inline-block;
+            background: #0088ff;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.9em;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid #00d4ff;
+            color: #0088cc;
+        }
+        a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 AlertBot API</h1>
+        
+        <div class="section">
+            <h2>📋 Overview</h2>
+            <p>AlertBot is a secure API for delivering alerts through multiple channels:</p>
+            <div style="margin: 20px 0;">
+                <span class="channel-badge">📧 Email</span>
+                <span class="channel-badge">💬 Telegram</span>
+                <span class="channel-badge">📱 Facebook Messenger</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔑 Authentication</h2>
+            <p>All API requests require an API key sent in the header:</p>
+            <div class="code-block">
+                <pre><code class="language-http">X-API-Key: your-api-key-here</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📡 Send Message Endpoint</h2>
+            <div class="endpoint">
+                <strong>POST</strong> /send
+            </div>
+            
+            <h3 style="color: #00d4ff; margin-top: 20px;">Request Body:</h3>
+            <div class="code-block">
+                <pre><code class="language-json">{
+  "channel": "email" | "telegram" | "facebook",
+  "recipient": "address_or_id",
+  "message": "Your message here"
+}</code></pre>
+            </div>
+
+            <h3 style="color: #00d4ff; margin-top: 20px;">Response:</h3>
+            <div class="code-block">
+                <pre><code class="language-json">{
+  "status": "sent" | "failed",
+  "details": "..."
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💡 Examples</h2>
+            
+            <h3 style="color: #00d4ff;">Email Example:</h3>
+            <div class="code-block">
+                <pre><code class="language-bash">curl -X POST https://your-domain/send \
+  -H "X-API-Key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "channel": "email",
+    "recipient": "user@example.com",
+    "message": "This is a test alert"
+  }'</code></pre>
+            </div>
+
+            <h3 style="color: #00d4ff;">Telegram Example:</h3>
+            <div class="code-block">
+                <pre><code class="language-bash">curl -X POST https://your-domain/send \
+  -H "X-API-Key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "channel": "telegram",
+    "recipient": "123456789",
+    "message": "Alert from AlertBot"
+  }'</code></pre>
+            </div>
+
+            <h3 style="color: #00d4ff;">Facebook Example:</h3>
+            <div class="code-block">
+                <pre><code class="language-bash">curl -X POST https://your-domain/send \
+  -H "X-API-Key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "channel": "facebook",
+    "recipient": "psid_here",
+    "message": "Important notification"
+  }'</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🤖 Getting User IDs</h2>
+            
+            <h3 style="color: #00d4ff;">Telegram:</h3>
+            <p>Users can get their Telegram ID by:</p>
+            <ul style="margin-left: 30px; margin-top: 10px;">
+                <li>Sending <code>/getid</code> command to your bot</li>
+                <li>Clicking "Get My ID" button in the bot</li>
+            </ul>
+
+            <h3 style="color: #00d4ff; margin-top: 20px;">Facebook:</h3>
+            <p>Users can get their PSID by:</p>
+            <ul style="margin-left: 30px; margin-top: 10px;">
+                <li>Clicking "Get Started" on your Facebook page</li>
+                <li>Sending <code>/getpsid</code> command in chat</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>⚡ Features</h2>
+            <ul style="margin-left: 30px; line-height: 2;">
+                <li>✅ Automatic retry with exponential backoff</li>
+                <li>✅ HTML email templates with Cyber theme</li>
+                <li>✅ Rate limiting protection</li>
+                <li>✅ Admin error notifications</li>
+                <li>✅ Message logging and tracking</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p>Powered by AlertBot</p>
+            <p style="margin-top: 10px;"><a href="/admin">Admin Panel</a></p>
+        </div>
+    </div>
+
+    <script>hljs.highlightAll();</script>
+</body>
+</html>
