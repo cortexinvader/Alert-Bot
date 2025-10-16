@@ -13,29 +13,39 @@ async def start_command(update: Update, context):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    await update.message.reply_text(
-        "🤖 Welcome to AlertBot!\n\n"
-        "I'm here to deliver important alerts to you.\n\n"
-        "Powered by AlertBot",
-        reply_markup=reply_markup
+    message = (
+        "╭──⦿【 ⚡ ALERTBOT 】\n"
+        "│ 👋 Welcome to AlertBot!\n"
+        "│ 🧠 I’m here to deliver important alerts to you.\n"
+        "│ 📡 Platform: Telegram\n"
+        "│ ⚙️ Version: v1.0\n"
+        "╰────────⦿"
     )
+    
+    await update.message.reply_text(message, reply_markup=reply_markup)
 
 async def getid_command(update: Update, context):
     user_id = update.effective_user.id
-    await update.message.reply_text(
-        f"🆔 Your Telegram ID: {user_id}\n\n"
-        f"Use this ID in your API calls.\n\n"
-        f"Powered by AlertBot"
+    message = (
+        f"╭──⦿【 🪪 TELEGRAM ID 】\n"
+        f"│ 👤 Your Telegram ID: {user_id}\n"
+        f"│ 🌐 Use this ID in your API calls.\n"
+        f"│ ⚡ Powered by AlertBot\n"
+        f"╰────────⦿"
     )
+    await update.message.reply_text(message)
 
 async def help_command(update: Update, context):
-    await update.message.reply_text(
-        "📚 Available Commands:\n\n"
-        "/start - Welcome message\n"
-        "/getid - Get your Telegram ID\n"
-        "/help - Show this help\n\n"
-        "Powered by AlertBot"
+    message = (
+        "╭──⦿【 📚 COMMAND LIST 】\n"
+        "│ /start - Display welcome message\n"
+        "│ /getid - Show your Telegram ID\n"
+        "│ /help  - Show this help menu\n"
+        "│\n"
+        "│ ⚡ Powered by AlertBot\n"
+        "╰────────⦿"
     )
+    await update.message.reply_text(message)
 
 async def button_callback(update: Update, context):
     query = update.callback_query
@@ -43,19 +53,25 @@ async def button_callback(update: Update, context):
     
     if query.data == 'getid':
         user_id = update.effective_user.id
-        await query.message.reply_text(
-            f"🆔 Your Telegram ID: {user_id}\n\n"
-            f"Use this ID in your API calls.\n\n"
-            f"Powered by AlertBot"
+        message = (
+            f"╭──⦿【 🪪 TELEGRAM ID 】\n"
+            f"│ 👤 Your Telegram ID: {user_id}\n"
+            f"│ 🌐 Use this ID in your API calls.\n"
+            f"│ ⚡ Powered by AlertBot\n"
+            f"╰────────⦿"
         )
+        await query.message.reply_text(message)
     elif query.data == 'help':
-        await query.message.reply_text(
-            "📚 Available Commands:\n\n"
-            "/start - Welcome message\n"
-            "/getid - Get your Telegram ID\n"
-            "/help - Show this help\n\n"
-            "Powered by AlertBot"
+        message = (
+            "╭──⦿【 📚 COMMAND LIST 】\n"
+            "│ /start - Display welcome message\n"
+            "│ /getid - Show your Telegram ID\n"
+            "│ /help  - Show this help menu\n"
+            "│\n"
+            "│ ⚡ Powered by AlertBot\n"
+            "╰────────⦿"
         )
+        await query.message.reply_text(message)
 
 async def ignore_messages(update: Update, context):
     pass
@@ -78,11 +94,17 @@ def setup_telegram_bot():
 
 async def send_telegram_async(recipient: str, message: str) -> dict:
     try:
-        bot = Bot(token=load_env_encrypted('TELEGRAM_BOT_TOKEN', ''))
-        await bot.send_message(
-            chat_id=recipient,
-            text=f"{message}\n\nPowered by AlertBot"
+        formatted_message = (
+            f"╭──⦿【 💬 NEW MESSAGE 】\n"
+            f"│ 👤 From: AlertBot\n"
+            f"│ 📨 Message:\n"
+            f"│ {message}\n"
+            f"│\n"
+            f"│ ⚡ Powered by AlertBot\n"
+            f"╰────────⦿"
         )
+        bot = Bot(token=load_env_encrypted('TELEGRAM_BOT_TOKEN', ''))
+        await bot.send_message(chat_id=recipient, text=formatted_message)
         return {"status": "sent", "details": "Telegram message sent successfully"}
     except Exception as e:
         return {"status": "failed", "details": str(e)}
