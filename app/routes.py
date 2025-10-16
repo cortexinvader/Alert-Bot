@@ -118,7 +118,7 @@ def register_routes(app):
         
         return render_template('admin_login.html')
     
-    @app.route('/admin')
+    @app.route('/cortex')
     @require_admin
     def admin_dashboard():
         db = get_session()
@@ -146,18 +146,21 @@ def register_routes(app):
         return jsonify(result)
     
     @app.route('/admin/generate-key', methods=['POST'])
-    @require_admin
-    def generate_api_key():
-        import secrets
-        new_key = f"alertbot_{secrets.token_urlsafe(32)}"
-        
-        db = get_session()
-        api_key = APIKey(key=new_key)
-        db.add(api_key)
-        db.commit()
-        db.close()
-        
-        return jsonify({"key": new_key})
+@require_admin
+def generate_api_key():
+    import secrets
+
+    
+    random_part = secrets.token_hex(4)  
+    new_key = f"ALB-{random_part}"
+
+    db = get_session()
+    api_key = APIKey(key=new_key)
+    db.add(api_key)
+    db.commit()
+    db.close()
+
+    return jsonify({"key": new_key})
     
     @app.route('/admin/logout')
     def admin_logout():
