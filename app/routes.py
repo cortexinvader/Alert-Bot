@@ -84,9 +84,9 @@ def register_routes(app):
     
     @app.route('/webhook/facebook', methods=['GET', 'POST'])
     def facebook_webhook():
-        import os
+        from app.utils import load_env_encrypted
         if request.method == 'GET':
-            verify_token = os.getenv('FACEBOOK_VERIFY_TOKEN')
+            verify_token = load_env_encrypted('FACEBOOK_VERIFY_TOKEN', 'alertbot_verify')
             token = request.args.get('hub.verify_token')
             challenge = request.args.get('hub.challenge')
             

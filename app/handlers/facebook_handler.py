@@ -1,9 +1,10 @@
 import os
 import requests
+from app.utils import load_env_encrypted
 
 def send_facebook(recipient: str, message: str) -> dict:
     try:
-        token = os.getenv('FACEBOOK_PAGE_TOKEN')
+        token = load_env_encrypted('FACEBOOK_PAGE_TOKEN', '')
         url = f"https://graph.facebook.com/v12.0/me/messages"
         
         payload = {

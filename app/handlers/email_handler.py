@@ -2,6 +2,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
+from app.utils import load_env_encrypted
 
 def get_html_template(message: str) -> str:
     return f"""
@@ -56,10 +57,10 @@ def get_html_template(message: str) -> str:
 
 def send_email(recipient: str, message: str, subject: str = "AlertBot Notification") -> dict:
     try:
-        smtp_server = os.getenv('SMTP_SERVER')
-        smtp_port = int(os.getenv('SMTP_PORT', 587))
-        smtp_user = os.getenv('SMTP_USERNAME')
-        smtp_pass = os.getenv('SMTP_PASSWORD')
+        smtp_server = load_env_encrypted('SMTP_SERVER', 'smtp.gmail.com')
+        smtp_port = int(load_env_encrypted('SMTP_PORT', '587'))
+        smtp_user = load_env_encrypted('SMTP_USERNAME', '')
+        smtp_pass = load_env_encrypted('SMTP_PASSWORD', '')
         
         msg = MIMEMultipart('alternative')
         msg['Subject'] = subject

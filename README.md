@@ -37,6 +37,29 @@ FACEBOOK_VERIFY_TOKEN=alertbot_verify
 SECRET_KEY=your-secret-key-here
 ```
 
+### Encrypting Sensitive Credentials (Optional)
+
+For enhanced security, you can encrypt sensitive values using the C++ encryption module:
+
+```bash
+# Build the encryption module first
+python setup.py build_ext --inplace
+
+# Encrypt a value
+python encrypt_credentials.py "your-secret-value"
+
+# Output: ENC:4a5b6c7d8e9f... (encrypted value)
+```
+
+Add the encrypted value to your `.env` file with the `ENC:` prefix:
+
+```env
+SMTP_PASSWORD=ENC:4a5b6c7d8e9f...
+TELEGRAM_BOT_TOKEN=ENC:1a2b3c4d5e6f...
+```
+
+The system will automatically decrypt these values on startup using your `SECRET_KEY`.
+
 ### Configuration
 
 Edit `config.json` to set admin credentials and notification settings:

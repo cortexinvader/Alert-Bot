@@ -4,6 +4,7 @@ from telegram import Bot
 import os
 import asyncio
 from functools import wraps
+from app.utils.encryption import load_env_encrypted
 
 def async_to_sync(func):
     @wraps(func)
@@ -28,14 +29,14 @@ async def report_error(error_message: str):
     
     if admin_telegram:
         try:
-            bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
+            bot = Bot(token=load_env_encrypted('TELEGRAM_BOT_TOKEN', ''))
             await bot.send_message(chat_id=admin_telegram, text=error_text)
         except Exception as e:
             print(f"Failed to send error to Telegram: {e}")
     
     if admin_facebook:
         try:
-            fb_token = os.getenv('FACEBOOK_PAGE_TOKEN')
+            fb_token = load_env_encrypted('FACEBOOK_PAGE_TOKEN', '')
             url = f"https://graph.facebook.com/v12.0/me/messages"
             payload = {
                 "recipient": {"id": admin_facebook},

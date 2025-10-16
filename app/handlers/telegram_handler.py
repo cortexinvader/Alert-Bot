@@ -2,6 +2,7 @@ import os
 from telegram import Bot, Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler
 import asyncio
+from app.utils import load_env_encrypted
 
 bot_app = None
 
@@ -61,7 +62,7 @@ async def ignore_messages(update: Update, context):
 
 def setup_telegram_bot():
     global bot_app
-    token = os.getenv('TELEGRAM_BOT_TOKEN')
+    token = load_env_encrypted('TELEGRAM_BOT_TOKEN', '')
     if not token:
         return
     
@@ -77,7 +78,7 @@ def setup_telegram_bot():
 
 async def send_telegram_async(recipient: str, message: str) -> dict:
     try:
-        bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
+        bot = Bot(token=load_env_encrypted('TELEGRAM_BOT_TOKEN', ''))
         await bot.send_message(
             chat_id=recipient,
             text=f"{message}\n\nPowered by AlertBot"
