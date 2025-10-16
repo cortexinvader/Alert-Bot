@@ -1,0 +1,209 @@
+Build a complete backend and web system called AlertBot, a secure and Nice API that lets users deliver alerts or messages through Email, Telegram, and Facebook Page Messenger. Using python flask
+
+
+
+
+---
+
+🧩 Core Overview
+
+AlertBot is not a chatbot — it’s a controlled alert system.
+It only responds to commands or specific events, not random messages.
+All messages and UIs must display the watermark “Powered by AlertBot”.
+
+The backend runs on Flask (Python) with optional C++ modules for performance-critical parts like encryption and queue management.
+The codebase should use short docstrings, minimal comments, and clean modern structure.
+
+
+---
+
+⚙️ Main Functionalities
+
+Central /send API route that accepts JSON requests:
+
+{
+  "channel": "email" | "telegram" | "facebook",
+  "recipient": "address_or_id",
+  "message": "text body"
+}
+
+The system should validate the request, route to the correct handler, and return:
+
+{ "status": "sent" | "failed", "details": "..." }
+
+
+
+---
+
+📬 Email System
+
+Uses SMTP with credentials from .env.
+
+Can send HTML or plain text.
+
+The default HTML email should have a Cyber Black & Blue theme — elegant, modern, and minimalist.
+
+Should gracefully handle failed deliveries and provide JSON feedback.
+
+
+
+---
+
+💬 Telegram Bot
+
+Built using python-telegram-bot.
+
+Responds only to the following commands:
+
+/start → Sends a short welcome.
+
+/getid → Replies with the user’s Telegram ID and message:
+
+Use this ID in your API calls.
+Powered by AlertBot
+
+/help → Lists basic usage commands.
+
+
+Ignores all normal text messages.
+
+Includes inline buttons (e.g., “Get My ID”, “Help”) that trigger the same commands.
+
+Should send messages from API calls using the bot’s sendMessage method.
+
+
+
+---
+
+💬 Facebook Page Bot
+
+Uses a webhook endpoint connected to Messenger.
+
+When a user clicks “Get Started”, bot sends:
+
+Welcome to AlertBot!
+Your PSID: {id}
+Use this PSID in your API calls.
+Powered by AlertBot
+
+Also supports the /getpsid command in chat to resend their PSID.
+
+Ignores all other messages.
+
+Should be able to send messages from API calls through the Messenger Send API.
+
+
+
+---
+
+🧠 Security and Config
+
+.env file holds:
+
+Email credentials
+
+Telegram bot token
+
+Facebook Page token
+
+Verify token etc..
+
+
+Credentials should be encrypted and decrypted on load using a C++ module (through pybind11 or ctypes).
+
+Apply basic rate limiting to prevent spam.
+
+Validate bad or unreachable recipients gracefully.
+
+
+
+---
+
+🌐 Web UI
+
+There are two interfaces:
+
+1. Public Documentation Page (no login)
+
+Explains how to use the API.
+
+Shows example JSON requests.
+
+Styled with black & blue Cyber theme.
+
+Includes syntax-highlighted API examples.
+
+Has a footer: “Powered by AlertBot”.
+
+
+
+2. Private Admin Panel (/admin route)
+
+Requires username & password (from config.json).
+
+Displays:
+
+Message logs (per channel)
+
+Active Telegram/Facebook users
+
+System status (OK/Error)
+
+Editable .env data (with encrypted save)
+
+
+Styled with futuristic Cyber Black & Blue UI (Tailwind or pure CSS).
+
+Includes interactive test buttons:
+
+Test Email
+
+Test Telegram
+
+Test Facebook
+
+
+Should feel like a “control center” dashboard.
+
+
+
+
+
+
+---
+
+🚀 Performance
+
+Use C++ extensions for:
+
+Credential encryption/decryption
+
+Message queuing (optional async)
+
+
+All integrated seamlessly with Python Flask.
+
+Avoid unnecessary dependencies.
+
+System should start fast, and endpoints respond quickly.
+
+
+
+---
+
+✅ Behavior Summary
+
+Telegram and Facebook bots only reply to defined commands or events.
+
+Facebook’s “Get Started” flow automatically sends PSID.
+
+Telegram /getid command gives user ID.
+
+Email sending works with stylish HTML.
+
+Public docs are visible; Admin dashboard is protected.
+
+All outputs branded with Powered by AlertBot.
+
+Code is clean, and modular.
+You could include docker for any other thing if necessary.  suggest all important things needed to make the project more stronger. A config.json to include Admin psid, admin chat. So if any errors occured, it will be reported immediately to admin, also API key, only admin can generate key default keys are in key.txt admin can add more key through admin UI, Make it deployable in places like render.
