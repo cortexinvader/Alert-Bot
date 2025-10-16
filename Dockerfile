@@ -13,8 +13,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN python setup.py build_ext --inplace
+RUN python setup.py build_ext --inplace || true
 
 EXPOSE 5000
+
 
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "120", "app:app"]
