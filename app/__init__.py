@@ -4,11 +4,13 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from dotenv import load_dotenv
 import os
-import json
 import threading
+from sqlalchemy import inspect
 
+# Load environment variables
 load_dotenv()
 
+# Initialize rate limiter
 limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"]
@@ -17,22 +19,33 @@ limiter = Limiter(
 _initialized = False
 
 
+def safe_init_db(engine, Base):
+    """Create only missing tables to avoid 'already exists' errors."""
+    inspector = inspect(engine)
+    existing = inspector.get_table_names()
+
+    missing = [t.name for t in Base.metadata.sorted_tables if t.name not in existing]
+    if missing:
+        print(f"🧱 Creating missing tables: {missing}")
+        Base.metadata.create_all(engine)
+    else:
+        print("✅ All tables already exist — skipping creation.")
+
+
 def init_default_keys():
-    """Initialize API keys from key.txt only if they don’t already exist."""
+    """Initialize API keys from key.txt if not already in DB."""
     from app.models import get_session, APIKey
     db = get_session()
 
-    # Read keys from key.txt
     if os.path.exists('key.txt'):
         with open('key.txt', 'r') as f:
             keys = [line.strip() for line in f if line.strip()]
-        
+
         for key in keys:
-            # Only add if not already present
             exists = db.query(APIKey).filter_by(key=key).first()
             if not exists:
                 db.add(APIKey(key=key))
-        
+
         db.commit()
     db.close()
 
@@ -47,8 +60,9 @@ def create_app():
     CORS(app)
     limiter.init_app(app)
 
-    from app.models import init_db
-    init_db()
+    # ✅ Safe DB initialization
+    from app.models import Base, engine
+    safe_init_db(engine, Base)
 
     from app.routes import register_routes
     register_routes(app)
@@ -62,7 +76,6 @@ def create_app():
         start_scheduler()
 
         from app.handlers import setup_telegram_bot
-        telegram_thread = threading.Thread(target=setup_telegram_bot, daemon=True)
-        telegram_thread.start()
+        threading.Thread(target=setup_telegram_bot, daemon=True).start()
 
     return app
