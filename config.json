@@ -2,7 +2,7 @@
   "admin": {
     "username": "admin",
     "password": "admin123",
-    "telegram_chat_id": "",
+    "telegram_chat_id": "8151428561",
     "facebook_psid": ""
   },
   "encryption": {
