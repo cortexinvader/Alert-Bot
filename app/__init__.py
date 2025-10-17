@@ -33,20 +33,30 @@ def safe_init_db(engine, Base):
 
 
 def init_default_keys():
-    """Initialize API keys from key.txt if not already in DB."""
+    """Initialize API keys from key.txt only if they don’t already exist."""
     from app.models import get_session, APIKey
     db = get_session()
 
-    if os.path.exists('key.txt'):
-        with open('key.txt', 'r') as f:
-            keys = [line.strip() for line in f if line.strip()]
+    if not os.path.exists('key.txt'):
+        print("⚠️ key.txt not found — skipping default key setup.")
+        return
 
-        for key in keys:
-            exists = db.query(APIKey).filter_by(key=key).first()
-            if not exists:
+    with open('key.txt', 'r') as f:
+        keys = [line.strip() for line in f if line.strip()]
+
+    for key in keys:
+        exists = db.query(APIKey).filter_by(key=key).first()
+        if not exists:
+            try:
                 db.add(APIKey(key=key))
+                db.commit()
+                print(f"✅ Added API key: {key}")
+            except Exception as e:
+                db.rollback()
+                print(f"⚠️ Skipped duplicate key {key}: {e}")
+        else:
+            print(f"🔹 Key already exists: {key}")
 
-        db.commit()
     db.close()
 
 
