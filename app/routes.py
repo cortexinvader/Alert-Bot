@@ -54,7 +54,7 @@ def register_routes(app):
             result = None
             if channel == 'email':
                 result = send_email(recipient, message)
-            elif channel == 'telegram'
+            elif channel == 'telegram':
                 result = send_telegram(recipient, message)
             elif channel == 'facebook':
                 result = send_facebook(recipient, message)
