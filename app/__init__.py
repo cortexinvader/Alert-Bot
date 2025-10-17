@@ -98,7 +98,7 @@ def init_default_keys():
                 db.add(APIKey(key=key))
                 db.commit()
                 print(f"✅ Added API key: {key}")
-            except sqlalchemy.exc.IntegrityError:
+            except Exception:
                 db.rollback()
                 print(f"⚠️ Skipped duplicate key {key}: (UNIQUE constraint failed)")
         else:
@@ -130,6 +130,11 @@ def create_app():
         try:
             safe_init_db(engine, Base)
             init_default_keys()
+            
+            # Start the retry queue scheduler
+            from app.queue import start_scheduler
+            start_scheduler()
+            app.logger.info("Retry queue scheduler started")
         finally:
             _initialized = True
 
