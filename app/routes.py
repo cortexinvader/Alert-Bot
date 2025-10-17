@@ -54,8 +54,7 @@ def register_routes(app):
             result = None
             if channel == 'email':
                 result = send_email(recipient, message)
-            elif channel == 'telegram':
-                result = send_telegram(recipient, message)
+            elif channel == from            result = send_telegram(recipient, message)
             elif channel == 'facebook':
                 result = send_facebook(recipient, message)
             else:
@@ -82,7 +81,7 @@ def register_routes(app):
             report_error(f"Error in /send endpoint: {str(e)}")
             return jsonify({"status": "failed", "details": str(e)}), 500
     
-    @app.route('/webhook', methods=['GET', 'POST'])
+    @app.route('/webhook/facebook', methods=['GET', 'POST'])
     def facebook_webhook():
         from app.utils import load_env_encrypted
         if request.method == 'GET':
@@ -95,9 +94,9 @@ def register_routes(app):
             return 'Invalid verification token', 403
         
         elif request.method == 'POST':
-            from app.handlers.facebook_handler import handle_facebook_webhook
+            from app.handlers.facebook_handler import handle_messenger_event
             data = request.json
-            handle_facebook_webhook(data)
+            handle_messenger_event(data)
             return 'OK', 200
     
     @app.route('/admin/login', methods=['GET', 'POST'])
