@@ -1,7 +1,8 @@
 import os
+import threading
+import asyncio
 from telegram import Bot, Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler
-import asyncio
 from app.utils import load_env_encrypted
 
 bot_app = None
@@ -74,13 +75,18 @@ async def button_callback(update: Update, context):
         await query.message.reply_text(message)
 
 async def ignore_messages(update: Update, context):
-    pass
+    # intentionally ignore plain text messages (bot is only for commands)
+    return
 
 def setup_telegram_bot():
+    """
+    Build and return the telegram Application (do NOT start polling here).
+    Returns the Application instance or None if token missing.
+    """
     global bot_app
     token = load_env_encrypted('TELEGRAM_BOT_TOKEN', '')
     if not token:
-        return
+        return None
     
     bot_app = Application.builder().token(token).build()
     
@@ -90,7 +96,30 @@ def setup_telegram_bot():
     bot_app.add_handler(CallbackQueryHandler(button_callback))
     bot_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, ignore_messages))
     
-    asyncio.create_task(bot_app.run_polling(allowed_updates=Update.ALL_TYPES))
+    return bot_app
+
+def start_telegram_polling(app: Application):
+    """
+    Run the Application.run_polling() inside an asyncio event loop.
+    Intended to be invoked inside a dedicated thread via threading.Thread(target=...).
+    """
+    try:
+        asyncio.run(app.run_polling(allowed_updates=Update.ALL_TYPES))
+    except Exception as e:
+        # If the Flask app exists, it will have logger; printing as fallback.
+        print("Telegram polling failed:", e)
+
+def start_telegram_in_thread():
+    """
+    Convenience: build the Application and start polling in a daemon thread.
+    Returns the Thread object or None if token missing.
+    """
+    app = setup_telegram_bot()
+    if app is None:
+        return None
+    t = threading.Thread(target=start_telegram_polling, args=(app,), daemon=True)
+    t.start()
+    return t
 
 async def send_telegram_async(recipient: str, message: str) -> dict:
     try:
