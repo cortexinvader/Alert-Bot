@@ -81,7 +81,7 @@ def register_routes(app):
             report_error(f"Error in /send endpoint: {str(e)}")
             return jsonify({"status": "failed", "details": str(e)}), 500
     
-    @app.route('/webhook/facebook', methods=['GET', 'POST'])
+    @app.route('/webhook', methods=['GET', 'POST'])
     def facebook_webhook():
         from app.utils import load_env_encrypted
         if request.method == 'GET':
