@@ -16,48 +16,53 @@ limiter = Limiter(
 
 _initialized = False
 
+
 def init_default_keys():
+    """Initialize API keys from key.txt only if they don’t already exist."""
     from app.models import get_session, APIKey
     db = get_session()
-    existing_keys = db.query(APIKey).count()
-    
-    if existing_keys == 0:
+
+    # Read keys from key.txt
+    if os.path.exists('key.txt'):
         with open('key.txt', 'r') as f:
             keys = [line.strip() for line in f if line.strip()]
         
         for key in keys:
-            api_key = APIKey(key=key)
-            db.add(api_key)
+            # Only add if not already present
+            exists = db.query(APIKey).filter_by(key=key).first()
+            if not exists:
+                db.add(APIKey(key=key))
         
         db.commit()
     db.close()
 
+
 def create_app():
     global _initialized
-    
+
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///alertbot.db')
-    
+
     CORS(app)
     limiter.init_app(app)
-    
+
     from app.models import init_db
     init_db()
-    
+
     from app.routes import register_routes
     register_routes(app)
-    
+
     if not _initialized:
         _initialized = True
-        
+
         init_default_keys()
-        
+
         from app.queue import start_scheduler
         start_scheduler()
-        
+
         from app.handlers import setup_telegram_bot
         telegram_thread = threading.Thread(target=setup_telegram_bot, daemon=True)
         telegram_thread.start()
-    
+
     return app
