@@ -55,7 +55,7 @@ async def button_callback(update: Update, context):
         user_id = update.effective_user.id
         message = (
             f"╭──⦿【 🪪 TELEGRAM ID 】\n"
-            f"│ 👤 Your Telegram ID: {user_id}\n"
+            f"│ 👤 Your Telegram ID: `{user_id}`\n"
             f"│ 🌐 Use this ID in your API calls.\n"
             f"│ ⚡ Powered by AlertBot\n"
             f"╰────────⦿"
