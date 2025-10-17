@@ -127,6 +127,27 @@ def register_routes(app):
         db.close()
         
         return render_template('admin.html', logs=logs, api_keys=api_keys)
+    @app.route('/admin/logout')
+    def admin_logout():
+        session.pop('admin_logged_in', None)
+        return redirect(url_for('admin_login'))
+
+    @app.route('/admin/generate-key', methods=['POST'])
+    @require_admin
+    def generate_api_key():
+        import secrets
+        
+        random_part = secrets.token_hex(4)
+        new_key = f"ALB-{random_part}"
+
+        db = get_session()
+        api_key = APIKey(key=new_key)
+        db.add(api_key)
+        db.commit()
+        db.close()
+
+        return jsonify({"key": new_key})
+
     
     @app.route('/admin/test/<channel>', methods=['POST'])
     @require_admin
@@ -145,24 +166,3 @@ def register_routes(app):
         
         return jsonify(result)
     
-    @app.route('/admin/generate-key', methods=['POST'])
-@require_admin
-def generate_api_key():
-    import secrets
-
-    
-    random_part = secrets.token_hex(4)  
-    new_key = f"ALB-{random_part}"
-
-    db = get_session()
-    api_key = APIKey(key=new_key)
-    db.add(api_key)
-    db.commit()
-    db.close()
-
-    return jsonify({"key": new_key})
-    
-    @app.route('/admin/logout')
-    def admin_logout():
-        session.pop('admin_logged_in', None)
-        return redirect(url_for('admin_login'))
