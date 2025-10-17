@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 import os
 import threading
 from sqlalchemy import inspect
+import sqlalchemy
+from sqlalchemy import create_engine
+from flask_limiter.util import get_remote_address
 
 # Load environment variables
 load_dotenv()
@@ -20,25 +23,70 @@ _initialized = False
 
 
 def safe_init_db(engine, Base):
-    """Create only missing tables to avoid 'already exists' errors."""
-    inspector = inspect(engine)
-    existing = inspector.get_table_names()
+    """
+    Create only missing tables in a way that's robust to multiple processes
+    (e.g. multiple gunicorn workers) racing to create the same tables.
 
-    missing = [t.name for t in Base.metadata.sorted_tables if t.name not in existing]
-    if missing:
-        print(f"🧱 Creating missing tables: {missing}")
-        Base.metadata.create_all(engine)
-    else:
+    Approach:
+    - Inspect existing tables first and only attempt to create missing tables.
+    - Wrap create_all in a try/except that tolerates SQLite 'table already exists'
+      errors which can occur when two processes concurrently decide to create the
+      same table after both saw it missing.
+    - If a concurrent creation happens, re-check and continue if all tables now exist.
+    """
+    from sqlalchemy.exc import OperationalError
+    inspector = inspect(engine)
+    try:
+        existing_tables = inspector.get_table_names()
+    except Exception:
+        # In case inspector fails for whatever reason, fall back to attempting create_all
+        existing_tables = []
+
+    missing = [t.name for t in Base.metadata.sorted_tables if t.name not in existing_tables]
+
+    if not missing:
         print("✅ All tables already exist — skipping creation.")
+        return
+
+    print(f"🧱 Creating missing tables: {missing}")
+
+    try:
+        # checkfirst True is default for create_all, but being explicit
+        Base.metadata.create_all(engine, checkfirst=True)
+    except OperationalError as e:
+        msg = str(e).lower()
+        if "already exists" in msg and "table" in msg:
+            # Another process likely created the table(s) concurrently.
+            print("⚠️ Detected concurrent table creation (another worker created tables). Re-checking...")
+            inspector = inspect(engine)
+            try:
+                existing_tables_after = inspector.get_table_names()
+            except Exception:
+                existing_tables_after = []
+
+            still_missing = [t.name for t in Base.metadata.sorted_tables if t.name not in existing_tables_after]
+            if still_missing:
+                # Try once more; if it fails, let the exception propagate.
+                try:
+                    Base.metadata.create_all(engine, checkfirst=True)
+                except Exception:
+                    print("❌ Retry failed while creating missing tables. Raising exception.")
+                    raise
+            else:
+                print("✅ All tables exist after concurrent creation — continuing.")
+        else:
+            # Re-raise unexpected OperationalErrors
+            raise
 
 
 def init_default_keys():
-    """Initialize API keys from key.txt only if they don’t already exist."""
+    """Initialize default API keys from app/models key.txt file if present."""
     from app.models import get_session, APIKey
     db = get_session()
 
     if not os.path.exists('key.txt'):
-        print("⚠️ key.txt not found — skipping default key setup.")
+        print("🔑 key.txt not found — skipping default keys initialization.")
+        db.close()
         return
 
     with open('key.txt', 'r') as f:
@@ -51,9 +99,9 @@ def init_default_keys():
                 db.add(APIKey(key=key))
                 db.commit()
                 print(f"✅ Added API key: {key}")
-            except Exception as e:
+            except sqlalchemy.exc.IntegrityError:
                 db.rollback()
-                print(f"⚠️ Skipped duplicate key {key}: {e}")
+                print(f"⚠️ Skipped duplicate key {key}: (UNIQUE constraint failed)")
         else:
             print(f"🔹 Key already exists: {key}")
 
@@ -70,22 +118,24 @@ def create_app():
     CORS(app)
     limiter.init_app(app)
 
-    # ✅ Safe DB initialization
-    from app.models import Base, engine
-    safe_init_db(engine, Base)
+    # Import DB models and Base
+    from app.models import Base  # noqa: E402
+    from app.models import get_engine  # get_engine should create engine from config
 
-    from app.routes import register_routes
-    register_routes(app)
+    engine = get_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 
+    # Safe DB init — guard with an in-process flag to avoid repeated work per worker
+    # Note: this flag only prevents multiple in-process initialization. In multi-process
+    # environments (gunicorn with multiple workers) safe_init_db is written to tolerate races.
     if not _initialized:
-        _initialized = True
+        try:
+            safe_init_db(engine, Base)
+            init_default_keys()
+        finally:
+            _initialized = True
 
-        init_default_keys()
-
-        from app.queue import start_scheduler
-        start_scheduler()
-
-        from app.handlers import setup_telegram_bot
-        threading.Thread(target=setup_telegram_bot, daemon=True).start()
+    # Register blueprints / routes
+    from app.routes import register_routes  # noqa: E402
+    register_routes(app)
 
     return app
