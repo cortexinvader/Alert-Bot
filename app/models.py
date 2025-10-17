@@ -1,13 +1,20 @@
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, Text, inspect
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from datetime import datetime
 import os
 
+# Base declaration
 Base = declarative_base()
-engine = create_engine(os.getenv('DATABASE_URL', 'sqlite:///alertbot.db'))
-Session = sessionmaker(bind=engine)
 
+# Engine & session setup
+DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///alertbot.db')
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False} if 'sqlite' in DATABASE_URL else {})
+SessionLocal = scoped_session(sessionmaker(bind=engine))
+
+# ---------------------------
+# Models
+# ---------------------------
 
 class APIKey(Base):
     __tablename__ = 'api_keys'
@@ -39,16 +46,19 @@ class RetryQueue(Base):
     next_retry = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
+# ---------------------------
+# Database Utility Functions
+# ---------------------------
 
 def init_db():
-    """Safely create only missing tables to prevent 'table already exists' errors."""
+    """Safely create only missing tables."""
     inspector = inspect(engine)
     existing_tables = inspector.get_table_names()
-
     for table_name, table_obj in Base.metadata.tables.items():
         if table_name not in existing_tables:
             table_obj.create(engine)
 
 
 def get_session():
-    return Session()
+    """Get thread-safe session."""
+    return SessionLocal()
