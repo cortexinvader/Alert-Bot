@@ -33,7 +33,7 @@ async def getid_command(update: Update, context):
         f"│ ⚡ Powered by AlertBot\n"
         f"╰────────⦿"
     )
-    await update.message.reply_text(message)
+    await update.message.reply_text(message, parse_mode=ParseMode.MARKDOWN_V2)
 
 async def help_command(update: Update, context):
     message = (
@@ -60,7 +60,7 @@ async def button_callback(update: Update, context):
             f"│ ⚡ Powered by AlertBot\n"
             f"╰────────⦿"
         )
-        await query.message.reply_text(message)
+        await query.message.reply_text(message, qparse_mode=ParseMode.MARKDOWN_V2)
     elif query.data == 'help':
         message = (
             "╭──⦿【 📚 COMMAND LIST 】\n"
