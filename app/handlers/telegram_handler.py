@@ -1,5 +1,4 @@
-import os
-import threading
+importeading
 import asyncio
 from telegram import Bot, Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler
@@ -100,14 +99,28 @@ def setup_telegram_bot():
 
 def start_telegram_polling(app: Application):
     """
-    Run the Application.run_polling() inside an asyncio event loop.
-    Intended to be invoked inside a dedicated thread via threading.Thread(target=...).
+    Run the Application.run_polling() in a dedicated thread.
+    Intended to be invoked inside threading.Thread(target=...).
     """
     try:
-        asyncio.run(app.run_polling(allowed_updates=Update.ALL_TYPES))
+        # Manually create and set event loop for this thread
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
+        # Run polling with signal handling disabled (required for threading)
+        loop.run_until_complete(app.run_polling(
+            allowed_updates=Update.ALL_TYPES,
+            drop_pending_updates=True,
+            close_loop=False,
+            stop_signals=None
+        ))
     except Exception as e:
-        # If the Flask app exists, it will have logger; printing as fallback.
-        print("Telegram polling failed:", e)
+        print(f"Telegram polling error: {e}")
+    finally:
+        try:
+            loop.close()
+        except:
+            pass
 
 def start_telegram_in_thread():
     """
