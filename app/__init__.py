@@ -8,7 +8,6 @@ import threading
 from sqlalchemy import inspect
 import sqlalchemy
 from sqlalchemy import create_engine
-from flask_limiter.util import get_remote_address
 
 # Load environment variables
 load_dotenv()
@@ -137,5 +136,64 @@ def create_app():
     # Register blueprints / routes
     from app.routes import register_routes  # noqa: E402
     register_routes(app)
+
+    # --- Start background services: Telegram polling & Facebook monitor ---
+    # Import bot starter helpers if present. These imports are best-effort so create_app
+    # remains resilient during development when handlers might not exist.
+    try:
+        from app.handlers.telegram_handler import setup_telegram_bot, start_telegram_polling  # noqa: E402
+    except Exception:
+        setup_telegram_bot = None
+        start_telegram_polling = None
+
+    try:
+        from app.handlers.facebook_handler import facebook_startup_check, subscribe_page_if_configured, start_facebook_monitor  # noqa: E402
+    except Exception:
+        facebook_startup_check = None
+        subscribe_page_if_configured = None
+        start_facebook_monitor = None
+
+    # Telegram: build Application and run polling inside a dedicated daemon thread.
+    try:
+        if setup_telegram_bot is not None and start_telegram_polling is not None:
+            bot_app = setup_telegram_bot()
+            if bot_app is not None:
+                t = threading.Thread(target=start_telegram_polling, args=(bot_app,), daemon=True)
+                t.start()
+                app.logger.info("Telegram polling started in background thread")
+            else:
+                app.logger.info("TELEGRAM_BOT_TOKEN not set; Telegram polling not started")
+        else:
+            app.logger.debug("Telegram starter not available; skipping Telegram startup")
+    except Exception:
+        app.logger.exception("Failed to initialize Telegram polling")
+
+    # Facebook: run a startup check and optionally start a background monitor that
+    # performs periodic validation and best-effort subscription to page events.
+    try:
+        if facebook_startup_check is not None:
+            fb_status = facebook_startup_check()
+            if fb_status.get("ok"):
+                app.logger.info("Facebook token valid: %s", fb_status.get("details"))
+                # Try subscribing the page automatically if configured
+                if subscribe_page_if_configured is not None:
+                    sub_res = subscribe_page_if_configured()
+                    if sub_res.get("ok"):
+                        app.logger.info("Facebook page subscription succeeded")
+                    else:
+                        app.logger.debug("Facebook subscribe attempt result: %s", sub_res.get("details"))
+            else:
+                app.logger.warning("Facebook startup check failed: %s", fb_status.get("details"))
+            # Start a monitor thread that periodically re-checks token & subscription.
+            if start_facebook_monitor is not None:
+                try:
+                    start_facebook_monitor(interval_seconds=int(os.getenv("FACEBOOK_MONITOR_INTERVAL", "600")))
+                    app.logger.info("Facebook monitor started")
+                except Exception:
+                    app.logger.exception("Failed to start Facebook monitor")
+        else:
+            app.logger.debug("Facebook startup helpers not available; skipping FB startup checks")
+    except Exception:
+        app.logger.exception("Exception during Facebook startup")
 
     return app
