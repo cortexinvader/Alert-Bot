@@ -49,7 +49,6 @@ class RetryQueue(Base):
 # ---------------------------
 # Database Utility Functions
 # ---------------------------
-
 def init_db():
     """Safely create only missing tables."""
     inspector = inspect(engine)
@@ -59,6 +58,22 @@ def init_db():
             table_obj.create(engine)
 
 
-def get_session():
-    """Get thread-safe session."""
-    return SessionLocal()
+def get_engine(db_url: str | None = None):
+    """
+    Return an engine for the given db_url. If db_url is None or matches the
+    module DATABASE_URL, return the module-level engine.
+    """
+    if db_url is None or db_url == DATABASE_URL:
+        return engine
+    connect_args = {"check_same_thread": False} if 'sqlite' in db_url else {}
+    return create_engine(db_url, connect_args=connect_args)
+
+
+def get_session(engine_arg=None):
+    """Get a session. If engine_arg is provided, return a session bound to it,
+    otherwise return the module-scoped SessionLocal().
+    """
+    if engine_arg is None:
+        return SessionLocal()
+    Session = sessionmaker(bind=engine_arg)
+    return Session()
