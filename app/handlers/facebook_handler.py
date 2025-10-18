@@ -23,8 +23,6 @@ __all__ = [
 def _format_alert_message(message: str) -> str:
     return (
         f"╭─⦿【💬 NEW MESSAGE】\n"
-        f"│ 👤 From: AlertBot\n"
-        f"│ 📨 Message:\n"
         f"│ {message}\n"
         f"│\n"
         f"│ ⚡ Powered by AlertBot\n"
@@ -111,7 +109,7 @@ def handle_messenger_event(data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
             text = message.get('text', '')
             if text and text.strip().lower() == '/getpsid':
                 psid_message = (
-                    f"╭─⦿【 🪪 FACEBOOK PSID 】\n"
+                    f"╭─⦿【🪪FACEBOOK PSID】\n"
                     f"│ 👤 Your PSID: {sender_id}\n"
                     f"│ 🌐 Use this PSID in your API calls.\n"
                     f"│ ⚡ Powered by AlertBot\n"
