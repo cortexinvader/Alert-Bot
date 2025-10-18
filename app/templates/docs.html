@@ -182,7 +182,7 @@
             <ul style="margin-left: 30px; margin-top: 10px;">
                 <li>Telegram: <a href="https://t.me/sman368">@sman368</a></li>
                 <li>WhatsApp: <a href="https://wa.me/+2348088941798">+2348088941798</a></li>
-                <li>API Endpoint: <a href="https://alert-bot-ol4a.onrender.com/send">https://alert-bot-ol4a.onrender.com/send</a></li>
+                <li>API Endpoint: <a id="api-endpoint" href=""></a></li>
             </ul>
         </div>
 
@@ -220,74 +220,16 @@
                     <button class="tab-button" data-tab="email-php">PHP</button>
                 </div>
                 <div class="code-editor active" id="email-curl">
-                    <textarea>curl -X POST https://alert-bot-ol4a.onrender.com/send \
-  -H "X-API-Key: your-api-key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "channel": "email",
-    "recipient": "user@example.com",
-    "message": "This is a test alert"
-  }'</textarea>
+                    <textarea id="email-curl-code"></textarea>
                 </div>
                 <div class="code-editor" id="email-python">
-                    <textarea>import requests
-
-url = "https://alert-bot-ol4a.onrender.com/send"
-headers = {
-    "X-API-Key": "your-api-key",
-    "Content-Type": "application/json"
-}
-data = {
-    "channel": "email",
-    "recipient": "user@example.com",
-    "message": "This is a test alert"
-}
-
-response = requests.post(url, headers=headers, json=data)
-print(response.json())</textarea>
+                    <textarea id="email-python-code"></textarea>
                 </div>
                 <div class="code-editor" id="email-js">
-                    <textarea>const url = 'https://alert-bot-ol4a.onrender.com/send';
-const headers = {
-    'X-API-Key': 'your-api-key',
-    'Content-Type': 'application/json'
-};
-const data = {
-    channel: 'email',
-    recipient: 'user@example.com',
-    message: 'This is a test alert'
-};
-
-fetch(url, {
-    method: 'POST',
-    headers: headers,
-    body: JSON.stringify(data)
-})
-.then(response => response.json())
-.then(data => console.log(data))
-.catch(error => console.error('Error:', error));</textarea>
+                    <textarea id="email-js-code"></textarea>
                 </div>
                 <div class="code-editor" id="email-php">
-                    <textarea><?php
-$url = 'https://alert-bot-ol4a.onrender.com/send';
-$data = [
-    'channel' => 'email',
-    'recipient' => 'user@example.com',
-    'message' => 'This is a test alert'
-];
-
-$options = [
-    'http' => [
-        'header' => "X-API-Key: your-api-key\r\nContent-Type: application/json\r\n",
-        'method' => 'POST',
-        'content' => json_encode($data)
-    ]
-];
-
-$context = stream_context_create($options);
-$result = file_get_contents($url, false, $context);
-echo $result;
-?></textarea>
+                    <textarea id="email-php-code"></textarea>
                 </div>
             </div>
 
@@ -300,74 +242,16 @@ echo $result;
                     <button class="tab-button" data-tab="telegram-php">PHP</button>
                 </div>
                 <div class="code-editor active" id="telegram-curl">
-                    <textarea>curl -X POST https://alert-bot-ol4a.onrender.com/send \
-  -H "X-API-Key: your-api-key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "channel": "telegram",
-    "recipient": "123456789",
-    "message": "Alert from AlertBot"
-  }'</textarea>
+                    <textarea id="telegram-curl-code"></textarea>
                 </div>
                 <div class="code-editor" id="telegram-python">
-                    <textarea>import requests
-
-url = "https://alert-bot-ol4a.onrender.com/send"
-headers = {
-    "X-API-Key": "your-api-key",
-    "Content-Type": "application/json"
-}
-data = {
-    "channel": "telegram",
-    "recipient": "123456789",
-    "message": "Alert from AlertBot"
-}
-
-response = requests.post(url, headers=headers, json=data)
-print(response.json())</textarea>
+                    <textarea id="telegram-python-code"></textarea>
                 </div>
                 <div class="code-editor" id="telegram-js">
-                    <textarea>const url = 'https://alert-bot-ol4a.onrender.com/send';
-const headers = {
-    'X-API-Key': 'your-api-key',
-    'Content-Type': 'application/json'
-};
-const data = {
-    channel: 'telegram',
-    recipient: '123456789',
-    message: 'Alert from AlertBot'
-};
-
-fetch(url, {
-    method: 'POST',
-    headers: headers,
-    body: JSON.stringify(data)
-})
-.then(response => response.json())
-.then(data => console.log(data))
-.catch(error => console.error('Error:', error));</textarea>
+                    <textarea id="telegram-js-code"></textarea>
                 </div>
                 <div class="code-editor" id="telegram-php">
-                    <textarea><?php
-$url = 'https://alert-bot-ol4a.onrender.com/send';
-$data = [
-    'channel' => 'telegram',
-    'recipient' => '123456789',
-    'message' => 'Alert from AlertBot'
-];
-
-$options = [
-    'http' => [
-        'header' => "X-API-Key: your-api-key\r\nContent-Type: application/json\r\n",
-        'method' => 'POST',
-        'content' => json_encode($data)
-    ]
-];
-
-$context = stream_context_create($options);
-$result = file_get_contents($url, false, $context);
-echo $result;
-?></textarea>
+                    <textarea id="telegram-php-code"></textarea>
                 </div>
             </div>
 
@@ -380,74 +264,16 @@ echo $result;
                     <button class="tab-button" data-tab="facebook-php">PHP</button>
                 </div>
                 <div class="code-editor active" id="facebook-curl">
-                    <textarea>curl -X POST https://alert-bot-ol4a.onrender.com/send \
-  -H "X-API-Key: your-api-key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "channel": "facebook",
-    "recipient": "psid_here",
-    "message": "Important notification"
-  }'</textarea>
+                    <textarea id="facebook-curl-code"></textarea>
                 </div>
                 <div class="code-editor" id="facebook-python">
-                    <textarea>import requests
-
-url = "https://alert-bot-ol4a.onrender.com/send"
-headers = {
-    "X-API-Key": "your-api-key",
-    "Content-Type": "application/json"
-}
-data = {
-    "channel": "facebook",
-    "recipient": "psid_here",
-    "message": "Important notification"
-}
-
-response = requests.post(url, headers=headers, json=data)
-print(response.json())</textarea>
+                    <textarea id="facebook-python-code"></textarea>
                 </div>
                 <div class="code-editor" id="facebook-js">
-                    <textarea>const url = 'https://alert-bot-ol4a.onrender.com/send';
-const headers = {
-    'X-API-Key': 'your-api-key',
-    'Content-Type': 'application/json'
-};
-const data = {
-    channel: 'facebook',
-    recipient: 'psid_here',
-    message: 'Important notification'
-};
-
-fetch(url, {
-    method: 'POST',
-    headers: headers,
-    body: JSON.stringify(data)
-})
-.then(response => response.json())
-.then(data => console.log(data))
-.catch(error => console.error('Error:', error));</textarea>
+                    <textarea id="facebook-js-code"></textarea>
                 </div>
                 <div class="code-editor" id="facebook-php">
-                    <textarea><?php
-$url = 'https://alert-bot-ol4a.onrender.com/send';
-$data = [
-    'channel' => 'facebook',
-    'recipient' => 'psid_here',
-    'message' => 'Important notification'
-];
-
-$options = [
-    'http' => [
-        'header' => "X-API-Key: your-api-key\r\nContent-Type: application/json\r\n",
-        'method' => 'POST',
-        'content' => json_encode($data)
-    ]
-];
-
-$context = stream_context_create($options);
-$result = file_get_contents($url, false, $context);
-echo $result;
-?></textarea>
+                    <textarea id="facebook-php-code"></textarea>
                 </div>
             </div>
         </div>
@@ -464,7 +290,7 @@ echo $result;
             <p>Users can get their PSID by interacting with the bot at <a href="https://m.me/youralertbot">https://m.me/youralertbot</a>:</p> <!-- Replace with your Facebook bot URL -->
             <ul style="margin-left: 30px; margin-top: 10px;">
                 <li>Clicking "Get Started" on the Facebook page</li>
-                <li><strong>OR</strong>Sending <code>/getpsid</code> command in chat</li>
+                <li><strong>OR</strong> Sending <code>/getpsid</code> command in chat</li>
             </ul>
         </div>
 
@@ -486,15 +312,213 @@ echo $result;
     </div>
 
     <script>
+        // Define the API URL in one place
+        const API_URL = 'https://alert-bot-ol4a.onrender.com/send';
+
+        // Code examples using the API_URL variable
+        const codeExamples = {
+            'email-curl': `curl -X POST ${API_URL} \\
+  -H "X-API-Key: your-api-key" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "channel": "email",
+    "recipient": "user@example.com",
+    "message": "This is a test alert"
+  }'`,
+            'email-python': `import requests
+
+url = "${API_URL}"
+headers = {
+    "X-API-Key": "your-api-key",
+    "Content-Type": "application/json"
+}
+data = {
+    "channel": "email",
+    "recipient": "user@example.com",
+    "message": "This is a test alert"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())`,
+            'email-js': `const url = '${API_URL}';
+const headers = {
+    'X-API-Key': 'your-api-key',
+    'Content-Type': 'application/json'
+};
+const data = {
+    channel: 'email',
+    recipient: 'user@example.com',
+    message: 'This is a test alert'
+};
+
+fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(data)
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));`,
+            'email-php': `<?php
+$url = '${API_URL}';
+$data = [
+    'channel' => 'email',
+    'recipient' => 'user@example.com',
+    'message' => 'This is a test alert'
+];
+
+$options = [
+    'http' => [
+        'header' => "X-API-Key: your-api-key\\r\\nContent-Type: application/json\\r\\n",
+        'method' => 'POST',
+        'content' => json_encode($data)
+    ]
+];
+
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+echo $result;
+?>`,
+            'telegram-curl': `curl -X POST ${API_URL} \\
+  -H "X-API-Key: your-api-key" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "channel": "telegram",
+    "recipient": "123456789",
+    "message": "Alert from AlertBot"
+  }'`,
+            'telegram-python': `import requests
+
+url = "${API_URL}"
+headers = {
+    "X-API-Key": "your-api-key",
+    "Content-Type": "application/json"
+}
+data = {
+    "channel": "telegram",
+    "recipient": "123456789",
+    "message": "Alert from AlertBot"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())`,
+            'telegram-js': `const url = '${API_URL}';
+const headers = {
+    'X-API-Key': 'your-api-key',
+    'Content-Type': 'application/json'
+};
+const data = {
+    channel: 'telegram',
+    recipient: '123456789',
+    message: 'Alert from AlertBot'
+};
+
+fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(data)
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));`,
+            'telegram-php': `<?php
+$url = '${API_URL}';
+$data = [
+    'channel' => 'telegram',
+    'recipient' => '123456789',
+    'message' => 'Alert from AlertBot'
+];
+
+$options = [
+    'http' => [
+        'header' => "X-API-Key: your-api-key\\r\\nContent-Type: application/json\\r\\n",
+        'method' => 'POST',
+        'content' => json_encode($data)
+    ]
+];
+
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+echo $result;
+?>`,
+            'facebook-curl': `curl -X POST ${API_URL} \\
+  -H "X-API-Key: your-api-key" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "channel": "facebook",
+    "recipient": "psid_here",
+    "message": "Important notification"
+  }'`,
+            'facebook-python': `import requests
+
+url = "${API_URL}"
+headers = {
+    "X-API-Key": "your-api-key",
+    "Content-Type": "application/json"
+}
+data = {
+    "channel": "facebook",
+    "recipient": "psid_here",
+    "message": "Important notification"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())`,
+            'facebook-js': `const url = '${API_URL}';
+const headers = {
+    'X-API-Key': 'your-api-key',
+    'Content-Type': 'application/json'
+};
+const data = {
+    channel: 'facebook',
+    recipient: 'psid_here',
+    message: 'Important notification'
+};
+
+fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(data)
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));`,
+            'facebook-php': `<?php
+$url = '${API_URL}';
+$data = [
+    'channel' => 'facebook',
+    'recipient' => 'psid_here',
+    'message' => 'Important notification'
+];
+
+$options = [
+    'http' => [
+        'header' => "X-API-Key: your-api-key\\r\\nContent-Type: application/json\\r\\n",
+        'method' => 'POST',
+        'content' => json_encode($data)
+    ]
+];
+
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+echo $result;
+?>`
+        };
+
         // Initialize Highlight.js for non-CodeMirror code blocks
         hljs.highlightAll();
 
-        // Initialize CodeMirror for code editors
-        document.querySelectorAll('.code-editor').forEach(editor => {
-            const textarea = editor.querySelector('textarea');
-            const mode = editor.id.includes('curl') ? 'shell' :
-                         editor.id.includes('python') ? 'python' :
-                         editor.id.includes('js') ? 'javascript' : 'php';
+        // Set API endpoint link in Authentication section
+        document.getElementById('api-endpoint').href = API_URL;
+        document.getElementById('api-endpoint').textContent = API_URL;
+
+        // Initialize CodeMirror for code editors and set content dynamically
+        Object.keys(codeExamples).forEach(id => {
+            const textarea = document.getElementById(`${id}-code`);
+            textarea.value = codeExamples[id];
+            const mode = id.includes('curl') ? 'shell' :
+                         id.includes('python') ? 'python' :
+                         id.includes('js') ? 'javascript' : 'php';
             CodeMirror.fromTextArea(textarea, {
                 mode: mode,
                 theme: 'default',
