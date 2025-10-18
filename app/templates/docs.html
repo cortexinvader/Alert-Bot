@@ -209,74 +209,74 @@
         </div>
 
         <div id="examples" class="section">
-            <h2>💡 Examples</h2>
+    <h2>💡 Examples</h2>
 
-            <h3 style="color: #3b82f6;">Email Example:</h3>
-            <div class="code-tabs">
-                <div class="tab-buttons">
-                    <button class="tab-button active" data-tab="email-curl">cURL</button>
-                    <button class="tab-button" data-tab="email-python">Python</button>
-                    <button class="tab-button" data-tab="email-js">JavaScript</button>
-                    <button class="tab-button" data-tab="email-php">PHP</button>
-                </div>
-                <div class="code-editor active" id="email-curl">
-                    <textarea id="email-curl-code"></textarea>
-                </div>
-                <div class="code-editor" id="email-python">
-                    <textarea id="email-python-code"></textarea>
-                </div>
-                <div class="code-editor" id="email-js">
-                    <textarea id="email-js-code"></textarea>
-                </div>
-                <div class="code-editor" id="email-php">
-                    <textarea id="email-php-code"></textarea>
-                </div>
-            </div>
-
-            <h3 style="color: #3b82f6;">Telegram Example:</h3>
-            <div class="code-tabs">
-                <div class="tab-buttons">
-                    <button class="tab-button active" data-tab="telegram-curl">cURL</button>
-                    <button class="tab-button" data-tab="telegram-python">Python</button>
-                    <button class="tab-button" data-tab="telegram-js">JavaScript</button>
-                    <button class="tab-button" data-tab="telegram-php">PHP</button>
-                </div>
-                <div class="code-editor active" id="telegram-curl">
-                    <textarea id="telegram-curl-code"></textarea>
-                </div>
-                <div class="code-editor" id="telegram-python">
-                    <textarea id="telegram-python-code"></textarea>
-                </div>
-                <div class="code-editor" id="telegram-js">
-                    <textarea id="telegram-js-code"></textarea>
-                </div>
-                <div class="code-editor" id="telegram-php">
-                    <textarea id="telegram-php-code"></textarea>
-                </div>
-            </div>
-
-            <h3 style="color: #3b82f6;">Facebook Example:</h3>
-            <div class="code-tabs">
-                <div class="tab-buttons">
-                    <button class="tab-button active" data-tab="facebook-curl">cURL</button>
-                    <button class="tab-button" data-tab="facebook-python">Python</button>
-                    <button class="tab-button" data-tab="facebook-js">JavaScript</button>
-                    <button class="tab-button" data-tab="facebook-php">PHP</button>
-                </div>
-                <div class="code-editor active" id="facebook-curl">
-                    <textarea id="facebook-curl-code"></textarea>
-                </div>
-                <div class="code-editor" id="facebook-python">
-                    <textarea id="facebook-python-code"></textarea>
-                </div>
-                <div class="code-editor" id="facebook-js">
-                    <textarea id="facebook-js-code"></textarea>
-                </div>
-                <div class="code-editor" id="facebook-php">
-                    <textarea id="facebook-php-code"></textarea>
-                </div>
-            </div>
+    <h3 style="color: #3b82f6;">Email Example:</h3>
+    <div class="code-tabs" data-group="email">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="email-curl">cURL</button>
+            <button class="tab-button" data-tab="email-python">Python</button>
+            <button class="tab-button" data-tab="email-js">JavaScript</button>
+            <button class="tab-button" data-tab="email-php">PHP</button>
         </div>
+        <div class="code-editor active" id="email-curl">
+            <textarea id="email-curl-code"></textarea>
+        </div>
+        <div class="code-editor" id="email-python">
+            <textarea id="email-python-code"></textarea>
+        </div>
+        <div class="code-editor" id="email-js">
+            <textarea id="email-js-code"></textarea>
+        </div>
+        <div class="code-editor" id="email-php">
+            <textarea id="email-php-code"></textarea>
+        </div>
+    </div>
+
+    <h3 style="color: #3b82f6;">Telegram Example:</h3>
+    <div class="code-tabs" data-group="telegram">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="telegram-curl">cURL</button>
+            <button class="tab-button" data-tab="telegram-python">Python</button>
+            <button class="tab-button" data-tab="telegram-js">JavaScript</button>
+            <button class="tab-button" data-tab="telegram-php">PHP</button>
+        </div>
+        <div class="code-editor active" id="telegram-curl">
+            <textarea id="telegram-curl-code"></textarea>
+        </div>
+        <div class="code-editor" id="telegram-python">
+            <textarea id="telegram-python-code"></textarea>
+        </div>
+        <div class="code-editor" id="telegram-js">
+            <textarea id="telegram-js-code"></textarea>
+        </div>
+        <div class="code-editor" id="telegram-php">
+            <textarea id="telegram-php-code"></textarea>
+        </div>
+    </div>
+
+    <h3 style="color: #3b82f6;">Facebook Example:</h3>
+    <div class="code-tabs" data-group="facebook">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="facebook-curl">cURL</button>
+            <button class="tab-button" data-tab="facebook-python">Python</button>
+            <button class="tab-button" data-tab="facebook-js">JavaScript</button>
+            <button class="tab-button" data-tab="facebook-php">PHP</button>
+        </div>
+        <div class="code-editor active" id="facebook-curl">
+            <textarea id="facebook-curl-code"></textarea>
+        </div>
+        <div class="code-editor" id="facebook-python">
+            <textarea id="facebook-python-code"></textarea>
+        </div>
+        <div class="code-editor" id="facebook-js">
+            <textarea id="facebook-js-code"></textarea>
+        </div>
+        <div class="code-editor" id="facebook-php">
+            <textarea id="facebook-php-code"></textarea>
+        </div>
+    </div>
+</div>
 
         <div id="user-ids" class="section">
             <h2>🤖 Getting User IDs</h2>
@@ -315,12 +315,12 @@
     </div>
 
     <script>
-        // Define the API URL in one place
-        const API_URL = 'https://alert-bot-ol4a.onrender.com/send';
+    // Define the API URL in one place
+    const API_URL = 'https://alert-bot-ol4a.onrender.com/send';
 
-        // Code examples using the API_URL variable
-        const codeExamples = {
-            'email-curl': `curl -X POST ${API_URL} \\
+    // Code examples using the API_URL variable
+    const codeExamples = {
+        'email-curl': `curl -X POST ${API_URL} \\
   -H "X-API-Key: your-api-key" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -328,7 +328,7 @@
     "recipient": "user@example.com",
     "message": "This is a test alert"
   }'`,
-            'email-python': `import requests
+        'email-python': `import requests
 
 url = "${API_URL}"
 headers = {
@@ -343,7 +343,7 @@ data = {
 
 response = requests.post(url, headers=headers, json=data)
 print(response.json())`,
-            'email-js': `const url = '${API_URL}';
+        'email-js': `const url = '${API_URL}';
 const headers = {
     'X-API-Key': 'your-api-key',
     'Content-Type': 'application/json'
@@ -362,7 +362,7 @@ fetch(url, {
 .then(response => response.json())
 .then(data => console.log(data))
 .catch(error => console.error('Error:', error));`,
-            'email-php': `<?php
+        'email-php': `<?php
 $url = '${API_URL}';
 $data = [
     'channel' => 'email',
@@ -382,7 +382,7 @@ $context = stream_context_create($options);
 $result = file_get_contents($url, false, $context);
 echo $result;
 ?>`,
-            'telegram-curl': `curl -X POST ${API_URL} \\
+        'telegram-curl': `curl -X POST ${API_URL} \\
   -H "X-API-Key: your-api-key" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -390,7 +390,7 @@ echo $result;
     "recipient": "123456789",
     "message": "Alert from AlertBot"
   }'`,
-            'telegram-python': `import requests
+        'telegram-python': `import requests
 
 url = "${API_URL}"
 headers = {
@@ -405,7 +405,7 @@ data = {
 
 response = requests.post(url, headers=headers, json=data)
 print(response.json())`,
-            'telegram-js': `const url = '${API_URL}';
+        'telegram-js': `const url = '${API_URL}';
 const headers = {
     'X-API-Key': 'your-api-key',
     'Content-Type': 'application/json'
@@ -424,7 +424,7 @@ fetch(url, {
 .then(response => response.json())
 .then(data => console.log(data))
 .catch(error => console.error('Error:', error));`,
-            'telegram-php': `<?php
+        'telegram-php': `<?php
 $url = '${API_URL}';
 $data = [
     'channel' => 'telegram',
@@ -444,7 +444,7 @@ $context = stream_context_create($options);
 $result = file_get_contents($url, false, $context);
 echo $result;
 ?>`,
-            'facebook-curl': `curl -X POST ${API_URL} \\
+        'facebook-curl': `curl -X POST ${API_URL} \\
   -H "X-API-Key: your-api-key" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -452,7 +452,7 @@ echo $result;
     "recipient": "psid_here",
     "message": "Important notification"
   }'`,
-            'facebook-python': `import requests
+        'facebook-python': `import requests
 
 url = "${API_URL}"
 headers = {
@@ -467,7 +467,7 @@ data = {
 
 response = requests.post(url, headers=headers, json=data)
 print(response.json())`,
-            'facebook-js': `const url = '${API_URL}';
+        'facebook-js': `const url = '${API_URL}';
 const headers = {
     'X-API-Key': 'your-api-key',
     'Content-Type': 'application/json'
@@ -486,7 +486,7 @@ fetch(url, {
 .then(response => response.json())
 .then(data => console.log(data))
 .catch(error => console.error('Error:', error));`,
-            'facebook-php': `<?php
+        'facebook-php': `<?php
 $url = '${API_URL}';
 $data = [
     'channel' => 'facebook',
@@ -506,18 +506,19 @@ $context = stream_context_create($options);
 $result = file_get_contents($url, false, $context);
 echo $result;
 ?>`
-        };
+    };
 
-        // Initialize Highlight.js for non-CodeMirror code blocks
-        hljs.highlightAll();
+    // Initialize Highlight.js for non-CodeMirror code blocks
+    hljs.highlightAll();
 
-        // Set API endpoint link in Authentication section
-        document.getElementById('api-endpoint').href = API_URL;
-        document.getElementById('api-endpoint').textContent = API_URL;
+    // Set API endpoint link in Authentication section
+    document.getElementById('api-endpoint').href = API_URL;
+    document.getElementById('api-endpoint').textContent = API_URL;
 
-        // Initialize CodeMirror for code editors and set content dynamically
-        Object.keys(codeExamples).forEach(id => {
-            const textarea = document.getElementById(`${id}-code`);
+    // Initialize CodeMirror for code editors and set content dynamically
+    Object.keys(codeExamples).forEach(id => {
+        const textarea = document.getElementById(`${id}-code`);
+        if (textarea) {
             textarea.value = codeExamples[id];
             const mode = id.includes('curl') ? 'shell' :
                          id.includes('python') ? 'python' :
@@ -528,19 +529,25 @@ echo $result;
                 lineNumbers: true,
                 readOnly: true
             });
-        });
+        }
+    });
 
-        // Tabbed interface functionality
-        document.querySelectorAll('.tab-button').forEach(button => {
+    // Tabbed interface functionality
+    document.querySelectorAll('.code-tabs').forEach(tabGroup => {
+        const groupId = tabGroup.getAttribute('data-group');
+        tabGroup.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', () => {
                 const tabId = button.getAttribute('data-tab');
-                const tabGroup = button.closest('.code-tabs');
+                // Deactivate all buttons and editors in this group
                 tabGroup.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
                 tabGroup.querySelectorAll('.code-editor').forEach(ed => ed.classList.remove('active'));
+                // Activate selected button and editor
                 button.classList.add('active');
                 document.getElementById(tabId).classList.add('active');
             });
         });
+    });
     </script>
+
 </body>
 </html>
