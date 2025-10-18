@@ -28,12 +28,12 @@ async def getid_command(update: Update, context):
     user_id = update.effective_user.id
     message = (
         f"╭──⦿【 🪪 TELEGRAM ID 】\n"
-        f"│ 👤 Your Telegram ID: `{user_id}`\n"
+        f"│ 👤 Your Telegram ID: {user_id}\n"
         f"│ 🌐 Use this ID in your API calls.\n"
         f"│ ⚡ Powered by AlertBot\n"
         f"╰────────⦿"
     )
-    await update.message.reply_text(message, parse_mode=ParseMode.MARKDOWN_V2)
+    await update.message.reply_text(message)
 
 async def help_command(update: Update, context):
     message = (
@@ -55,12 +55,12 @@ async def button_callback(update: Update, context):
         user_id = update.effective_user.id
         message = (
             f"╭──⦿【 🪪 TELEGRAM ID 】\n"
-            f"│ 👤 Your Telegram ID: `{user_id}`\n"
+            f"│ 👤 Your Telegram ID: {user_id}\n"
             f"│ 🌐 Use this ID in your API calls.\n"
             f"│ ⚡ Powered by AlertBot\n"
             f"╰────────⦿"
         )
-        await query.message.reply_text(message, qparse_mode=ParseMode.MARKDOWN_V2)
+        await query.message.reply_text(message)
     elif query.data == 'help':
         message = (
             "╭──⦿【 📚 COMMAND LIST 】\n"
