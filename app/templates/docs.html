@@ -4,8 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AlertBot API Documentation</title>
+    <!-- Highlight.js for fallback syntax highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- CodeMirror for interactive code editor -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/php/php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/shell/shell.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -13,11 +21,12 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
-            color: #00d4ff;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a233a 100%);
+            color: #d1d5db;
             min-height: 100vh;
             padding: 20px;
+            line-height: 1.6;
         }
         .container {
             max-width: 1200px;
@@ -25,31 +34,46 @@
         }
         h1 {
             text-align: center;
-            font-size: 3em;
+            font-size: 2.5em;
             margin: 40px 0;
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
-            background: linear-gradient(90deg, #00d4ff, #0088ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+            color: #3b82f6;
+        }
+        .nav {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .nav a {
+            color: #93c5fd;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .nav a:hover {
+            color: #3b82f6;
+            text-decoration: underline;
         }
         .section {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid #00d4ff;
-            border-radius: 10px;
-            padding: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 25px;
             margin: 20px 0;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
         }
         h2 {
-            color: #00d4ff;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #00d4ff;
-            padding-bottom: 10px;
+            color: #3b82f6;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 8px;
         }
         .endpoint {
-            background: rgba(0, 50, 100, 0.3);
+            background: rgba(31, 41, 55, 0.3);
             padding: 15px;
-            border-left: 4px solid #00d4ff;
+            border-left: 4px solid #3b82f6;
             margin: 15px 0;
         }
         .code-block {
@@ -67,8 +91,8 @@
         }
         .channel-badge {
             display: inline-block;
-            background: #0088ff;
-            color: white;
+            background: #374151;
+            color: #e5e7eb;
             padding: 5px 15px;
             border-radius: 20px;
             margin: 5px;
@@ -78,23 +102,67 @@
             text-align: center;
             margin-top: 50px;
             padding: 20px;
-            border-top: 1px solid #00d4ff;
-            color: #0088cc;
+            border-top: 1px solid #374151;
+            color: #6b7280;
         }
         a {
-            color: #00d4ff;
+            color: #93c5fd;
             text-decoration: none;
         }
         a:hover {
+            color: #3b82f6;
             text-decoration: underline;
+        }
+        /* Tabbed Code Editor Styles */
+        .code-tabs {
+            margin: 15px 0;
+        }
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid #374151;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            background: #1e1e1e;
+            color: #d1d5db;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .tab-button.active {
+            background: #3b82f6;
+            color: #fff;
+        }
+        .tab-button:hover {
+            background: #4b5563;
+        }
+        .code-editor {
+            display: none;
+        }
+        .code-editor.active {
+            display: block;
+        }
+        .CodeMirror {
+            height: auto;
+            border-radius: 5px;
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🚀 AlertBot API</h1>
-        
-        <div class="section">
+
+        <div class="nav">
+            <a href="#overview">Overview</a>
+            <a href="#authentication">Authentication</a>
+            <a href="#send-message">Send Message</a>
+            <a href="#examples">Examples</a>
+            <a href="#user-ids">User IDs</a>
+            <a href="#features">Features</a>
+        </div>
+
+        <div id="overview" class="section">
             <h2>📋 Overview</h2>
             <p>AlertBot is a secure API for delivering alerts through multiple channels:</p>
             <div style="margin: 20px 0;">
@@ -104,21 +172,26 @@
             </div>
         </div>
 
-        <div class="section">
+        <div id="authentication" class="section">
             <h2>🔑 Authentication</h2>
             <p>All API requests require an API key sent in the header:</p>
             <div class="code-block">
                 <pre><code class="language-http">X-API-Key: your-api-key-here</code></pre>
             </div>
+            <p>To obtain an API key, contact the admin:</p>
+            <ul style="margin-left: 30px; margin-top: 10px;">
+                <li>Telegram: <a href="https://t.me/sman368">@sman368</a></li>
+                <li>WhatsApp: <a href="https://wa.me/+2348088941798">+2348088941798</a></li>
+                <li>API Endpoint: <a href="https://alert-bot-ol4a.onrender.com/send">https://alert-bot-ol4a.onrender.com/send</a></li>
+            </ul>
         </div>
 
-        <div class="section">
+        <div id="send-message" class="section">
             <h2>📡 Send Message Endpoint</h2>
             <div class="endpoint">
                 <strong>POST</strong> /send
             </div>
-            
-            <h3 style="color: #00d4ff; margin-top: 20px;">Request Body:</h3>
+            <h3 style="color: #3b82f6; margin-top: 20px;">Request Body:</h3>
             <div class="code-block">
                 <pre><code class="language-json">{
   "channel": "email" | "telegram" | "facebook",
@@ -126,8 +199,7 @@
   "message": "Your message here"
 }</code></pre>
             </div>
-
-            <h3 style="color: #00d4ff; margin-top: 20px;">Response:</h3>
+            <h3 style="color: #3b82f6; margin-top: 20px;">Response:</h3>
             <div class="code-block">
                 <pre><code class="language-json">{
   "status": "sent" | "failed",
@@ -136,65 +208,267 @@
             </div>
         </div>
 
-        <div class="section">
+        <div id="examples" class="section">
             <h2>💡 Examples</h2>
-            
-            <h3 style="color: #00d4ff;">Email Example:</h3>
-            <div class="code-block">
-                <pre><code class="language-bash">curl -X POST https://your-domain/send \
+
+            <h3 style="color: #3b82f6;">Email Example:</h3>
+            <div class="code-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="email-curl">cURL</button>
+                    <button class="tab-button" data-tab="email-python">Python</button>
+                    <button class="tab-button" data-tab="email-js">JavaScript</button>
+                    <button class="tab-button" data-tab="email-php">PHP</button>
+                </div>
+                <div class="code-editor active" id="email-curl">
+                    <textarea>curl -X POST https://alert-bot-ol4a.onrender.com/send \
   -H "X-API-Key: your-api-key" \
   -H "Content-Type: application/json" \
   -d '{
     "channel": "email",
     "recipient": "user@example.com",
     "message": "This is a test alert"
-  }'</code></pre>
+  }'</textarea>
+                </div>
+                <div class="code-editor" id="email-python">
+                    <textarea>import requests
+
+url = "https://alert-bot-ol4a.onrender.com/send"
+headers = {
+    "X-API-Key": "your-api-key",
+    "Content-Type": "application/json"
+}
+data = {
+    "channel": "email",
+    "recipient": "user@example.com",
+    "message": "This is a test alert"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())</textarea>
+                </div>
+                <div class="code-editor" id="email-js">
+                    <textarea>const url = 'https://alert-bot-ol4a.onrender.com/send';
+const headers = {
+    'X-API-Key': 'your-api-key',
+    'Content-Type': 'application/json'
+};
+const data = {
+    channel: 'email',
+    recipient: 'user@example.com',
+    message: 'This is a test alert'
+};
+
+fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(data)
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));</textarea>
+                </div>
+                <div class="code-editor" id="email-php">
+                    <textarea><?php
+$url = 'https://alert-bot-ol4a.onrender.com/send';
+$data = [
+    'channel' => 'email',
+    'recipient' => 'user@example.com',
+    'message' => 'This is a test alert'
+];
+
+$options = [
+    'http' => [
+        'header' => "X-API-Key: your-api-key\r\nContent-Type: application/json\r\n",
+        'method' => 'POST',
+        'content' => json_encode($data)
+    ]
+];
+
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+echo $result;
+?></textarea>
+                </div>
             </div>
 
-            <h3 style="color: #00d4ff;">Telegram Example:</h3>
-            <div class="code-block">
-                <pre><code class="language-bash">curl -X POST https://your-domain/send \
+            <h3 style="color: #3b82f6;">Telegram Example:</h3>
+            <div class="code-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="telegram-curl">cURL</button>
+                    <button class="tab-button" data-tab="telegram-python">Python</button>
+                    <button class="tab-button" data-tab="telegram-js">JavaScript</button>
+                    <button class="tab-button" data-tab="telegram-php">PHP</button>
+                </div>
+                <div class="code-editor active" id="telegram-curl">
+                    <textarea>curl -X POST https://alert-bot-ol4a.onrender.com/send \
   -H "X-API-Key: your-api-key" \
   -H "Content-Type: application/json" \
   -d '{
     "channel": "telegram",
     "recipient": "123456789",
     "message": "Alert from AlertBot"
-  }'</code></pre>
+  }'</textarea>
+                </div>
+                <div class="code-editor" id="telegram-python">
+                    <textarea>import requests
+
+url = "https://alert-bot-ol4a.onrender.com/send"
+headers = {
+    "X-API-Key": "your-api-key",
+    "Content-Type": "application/json"
+}
+data = {
+    "channel": "telegram",
+    "recipient": "123456789",
+    "message": "Alert from AlertBot"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())</textarea>
+                </div>
+                <div class="code-editor" id="telegram-js">
+                    <textarea>const url = 'https://alert-bot-ol4a.onrender.com/send';
+const headers = {
+    'X-API-Key': 'your-api-key',
+    'Content-Type': 'application/json'
+};
+const data = {
+    channel: 'telegram',
+    recipient: '123456789',
+    message: 'Alert from AlertBot'
+};
+
+fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(data)
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));</textarea>
+                </div>
+                <div class="code-editor" id="telegram-php">
+                    <textarea><?php
+$url = 'https://alert-bot-ol4a.onrender.com/send';
+$data = [
+    'channel' => 'telegram',
+    'recipient' => '123456789',
+    'message' => 'Alert from AlertBot'
+];
+
+$options = [
+    'http' => [
+        'header' => "X-API-Key: your-api-key\r\nContent-Type: application/json\r\n",
+        'method' => 'POST',
+        'content' => json_encode($data)
+    ]
+];
+
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+echo $result;
+?></textarea>
+                </div>
             </div>
 
-            <h3 style="color: #00d4ff;">Facebook Example:</h3>
-            <div class="code-block">
-                <pre><code class="language-bash">curl -X POST https://your-domain/send \
+            <h3 style="color: #3b82f6;">Facebook Example:</h3>
+            <div class="code-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="facebook-curl">cURL</button>
+                    <button class="tab-button" data-tab="facebook-python">Python</button>
+                    <button class="tab-button" data-tab="facebook-js">JavaScript</button>
+                    <button class="tab-button" data-tab="facebook-php">PHP</button>
+                </div>
+                <div class="code-editor active" id="facebook-curl">
+                    <textarea>curl -X POST https://alert-bot-ol4a.onrender.com/send \
   -H "X-API-Key: your-api-key" \
   -H "Content-Type: application/json" \
   -d '{
     "channel": "facebook",
     "recipient": "psid_here",
     "message": "Important notification"
-  }'</code></pre>
+  }'</textarea>
+                </div>
+                <div class="code-editor" id="facebook-python">
+                    <textarea>import requests
+
+url = "https://alert-bot-ol4a.onrender.com/send"
+headers = {
+    "X-API-Key": "your-api-key",
+    "Content-Type": "application/json"
+}
+data = {
+    "channel": "facebook",
+    "recipient": "psid_here",
+    "message": "Important notification"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())</textarea>
+                </div>
+                <div class="code-editor" id="facebook-js">
+                    <textarea>const url = 'https://alert-bot-ol4a.onrender.com/send';
+const headers = {
+    'X-API-Key': 'your-api-key',
+    'Content-Type': 'application/json'
+};
+const data = {
+    channel: 'facebook',
+    recipient: 'psid_here',
+    message: 'Important notification'
+};
+
+fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(data)
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));</textarea>
+                </div>
+                <div class="code-editor" id="facebook-php">
+                    <textarea><?php
+$url = 'https://alert-bot-ol4a.onrender.com/send';
+$data = [
+    'channel' => 'facebook',
+    'recipient' => 'psid_here',
+    'message' => 'Important notification'
+];
+
+$options = [
+    'http' => [
+        'header' => "X-API-Key: your-api-key\r\nContent-Type: application/json\r\n",
+        'method' => 'POST',
+        'content' => json_encode($data)
+    ]
+];
+
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+echo $result;
+?></textarea>
+                </div>
             </div>
         </div>
 
-        <div class="section">
+        <div id="user-ids" class="section">
             <h2>🤖 Getting User IDs</h2>
-            
-            <h3 style="color: #00d4ff;">Telegram:</h3>
-            <p>Users can get their Telegram ID by:</p>
+            <h3 style="color: #3b82f6;">Telegram:</h3>
+            <p>Users can get their Telegram ID by interacting with <a href="https://t.me/YourAlertBot">@YourAlertBot</a>:</p> <!-- Replace @YourAlertBot with your bot username -->
             <ul style="margin-left: 30px; margin-top: 10px;">
-                <li>Sending <code>/getid</code> command to your bot</li>
+                <li>Sending <code>/getid</code> command to the bot</li>
                 <li>Clicking "Get My ID" button in the bot</li>
             </ul>
-
-            <h3 style="color: #00d4ff; margin-top: 20px;">Facebook:</h3>
-            <p>Users can get their PSID by:</p>
+            <h3 style="color: #3b82f6; margin-top: 20px;">Facebook:</h3>
+            <p>Users can get their PSID by interacting with the bot at <a href="https://m.me/youralertbot">https://m.me/youralertbot</a>:</p> <!-- Replace with your Facebook bot URL -->
             <ul style="margin-left: 30px; margin-top: 10px;">
-                <li>Clicking "Get Started" on your Facebook page</li>
-                <li>Sending <code>/getpsid</code> command in chat</li>
+                <li>Clicking "Get Started" on the Facebook page</li>
+                <li><strong>OR</strong>Sending <code>/getpsid</code> command in chat</li>
             </ul>
         </div>
 
-        <div class="section">
+        <div id="features" class="section">
             <h2>⚡ Features</h2>
             <ul style="margin-left: 30px; line-height: 2;">
                 <li>✅ Automatic retry with exponential backoff</li>
@@ -211,6 +485,35 @@
         </div>
     </div>
 
-    <script>hljs.highlightAll();</script>
+    <script>
+        // Initialize Highlight.js for non-CodeMirror code blocks
+        hljs.highlightAll();
+
+        // Initialize CodeMirror for code editors
+        document.querySelectorAll('.code-editor').forEach(editor => {
+            const textarea = editor.querySelector('textarea');
+            const mode = editor.id.includes('curl') ? 'shell' :
+                         editor.id.includes('python') ? 'python' :
+                         editor.id.includes('js') ? 'javascript' : 'php';
+            CodeMirror.fromTextArea(textarea, {
+                mode: mode,
+                theme: 'default',
+                lineNumbers: true,
+                readOnly: true
+            });
+        });
+
+        // Tabbed interface functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                const tabGroup = button.closest('.code-tabs');
+                tabGroup.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                tabGroup.querySelectorAll('.code-editor').forEach(ed => ed.classList.remove('active'));
+                button.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
