@@ -1,0 +1,19 @@
+{
+  "admin": {
+    "username": "admin",
+    "password": "admin123",
+    "telegram_chat_id": "8151428561",
+    "facebook_psid": ""
+  },
+  "encryption": {
+    "enabled": true
+  },
+  "rate_limit": {
+    "requests_per_minute": 60
+  },
+  "retry": {
+    "max_attempts": 3,
+    "base_delay": 2,
+    "max_delay": 60
+  }
+}

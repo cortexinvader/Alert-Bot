@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  alertbot:
+    build: .
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - ./alertbot.db:/app/alertbot.db
+      - ./config.json:/app/config.json
+      - ./key.txt:/app/key.txt
+    restart: unless-stopped

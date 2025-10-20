@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlertBot API Documentation</title>
+
+<!-- Highlight.js for static code -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<!-- CodeMirror setup -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/theme/dracula.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/php/php.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/shell/shell.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Inter','Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#0a0e27,#1a233a);
+  color:#d1d5db;
+  min-height:100vh;
+  padding:20px;
+}
+.container{max-width:1200px;margin:0 auto}
+h1{text-align:center;font-size:2.5em;margin:40px 0;color:#3b82f6;text-shadow:0 0 10px rgba(59,130,246,.3)}
+.nav{
+  background:rgba(0,0,0,.5);
+  text-align:center;
+  padding:15px;border-radius:8px;margin-bottom:20px
+}
+.nav a{color:#93c5fd;margin:0 15px;text-decoration:none}
+.nav a:hover{color:#3b82f6;text-decoration:underline}
+.section{
+  background:rgba(0,0,0,.45);
+  border:1px solid #374151;
+  border-radius:8px;
+  padding:25px;margin:20px 0;
+  box-shadow:0 0 15px rgba(59,130,246,.08)
+}
+h2{color:#3b82f6;margin-bottom:15px;border-bottom:1px solid #374151;padding-bottom:8px}
+.endpoint{background:rgba(31,41,55,.3);padding:15px;border-left:4px solid #3b82f6;margin:15px 0}
+.code-block{background:#1e1e1e;border-radius:5px;margin:15px 0;overflow-x:auto}
+pre{margin:0;padding:15px}
+code{font-family:'Courier New',monospace}
+.channel-badge{
+  display:inline-block;background:#374151;color:#e5e7eb;
+  padding:5px 15px;border-radius:20px;margin:5px;font-size:.9em
+}
+.footer{text-align:center;margin-top:50px;padding:20px;border-top:1px solid #374151;color:#6b7280}
+a{color:#93c5fd;text-decoration:none}
+a:hover{color:#3b82f6;text-decoration:underline}
+
+/* Code Tabs */
+.code-tabs{margin:15px 0}
+.tab-buttons{display:flex;border-bottom:1px solid #374151}
+.tab-button{
+  padding:10px 20px;background:#1e1e1e;color:#d1d5db;
+  border:none;cursor:pointer;font-size:.9em;transition:.2s
+}
+.tab-button.active{background:#3b82f6;color:#fff}
+.tab-button:hover{background:#4b5563}
+.code-editor{display:none}
+.code-editor.active{display:block}
+.CodeMirror{height:auto;border-radius:5px;font-size:.9em}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>🚀 AlertBot API</h1>
+
+<div class="nav">
+  <a href="#overview">Overview</a>
+  <a href="#authentication">Authentication</a>
+  <a href="#send-message">Send Message</a>
+  <a href="#examples">Examples</a>
+  <a href="#user-ids">User IDs</a>
+  <a href="#features">Features</a>
+</div>
+
+<div id="overview" class="section">
+  <h2>📋 Overview</h2>
+  <p>AlertBot is a secure API for delivering alerts through multiple channels:</p>
+  <div style="margin:20px 0">
+    <span class="channel-badge">📧 Email</span>
+    <span class="channel-badge">💬 Telegram</span>
+    <span class="channel-badge">📱 Facebook Messenger</span>
+  </div>
+</div>
+
+<div id="authentication" class="section">
+  <h2>🔑 Authentication</h2>
+  <p>All requests require an API key:</p>
+  <div class="code-block"><pre><code class="language-http">X-API-Key: your-api-key</code></pre></div>
+  <p>Contact admin for key:</p>
+  <ul style="margin-left:30px;margin-top:10px">
+    <li>Telegram: <a href="https://t.me/cortexinvader">Cortex Invader</a></li>
+    <li>WhatsApp: <a href="https://wa.me/+2348088941798">+2348088941798</a></li>
+    <li>API Endpoint: <a id="api-endpoint" href=""></a></li>
+  </ul>
+</div>
+
+<div id="send-message" class="section">
+  <h2>📡 Send Message Endpoint</h2>
+  <div class="endpoint"><strong>POST</strong> /send</div>
+  <h3 style="color:#3b82f6;margin-top:20px">Request Body:</h3>
+  <div class="code-block"><pre><code class="language-json">{
+  "channel": "email" | "telegram" | "facebook",
+  "recipient": "address_or_id",
+  "message": "Your message"
+}</code></pre></div>
+</div>
+
+<div id="examples" class="section">
+  <h2>💡 Examples</h2>
+
+  <!-- Example block (reuse for all channels) -->
+  <div class="code-tabs" data-group="email">
+    <div class="tab-buttons">
+      <button class="tab-button active" data-tab="email-curl">cURL</button>
+      <button class="tab-button" data-tab="email-python">Python</button>
+      <button class="tab-button" data-tab="email-js">JavaScript</button>
+      <button class="tab-button" data-tab="email-php">PHP</button>
+    </div>
+    <div class="code-editor active" id="email-curl"><textarea id="email-curl-code"></textarea></div>
+    <div class="code-editor" id="email-python"><textarea id="email-python-code"></textarea></div>
+    <div class="code-editor" id="email-js"><textarea id="email-js-code"></textarea></div>
+    <div class="code-editor" id="email-php"><textarea id="email-php-code"></textarea></div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Powered by AlertBot</p>
+  <p style="margin-top:10px"><a href="/cortex">MADE WITH ♥️ BY SULEIMAN</a></p>
+</div>
+</div>
+
+<script>
+//=== CONFIG ===//
+const API_URL = "https://alert-bot-ol4a.onrender.com/send";
+
+//=== CODE EXAMPLES ===//
+const codeExamples = {
+  'email-curl': `curl -X POST ${API_URL} \\
+  -H "X-API-Key: your-api-key" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "channel": "email | facebook | telegram",
+    "recipient": "user@example.com",
+    "message": "Test alert"
+  }'`,
+
+  'email-python': `import requests
+
+url = "${API_URL}"
+headers = {
+    "X-API-Key": "your-api-key",
+    "Content-Type": "application/json"
+}
+data = {
+    "channel": "email | facebook | telegram",
+    "recipient": "user@example.com",
+    "message": "Test alert"
+}
+response = requests.post(url, headers=headers, json=data)
+print(response.json())`,
+
+  'email-js': `const url = '${API_URL}';
+fetch(url, {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'your-api-key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    channel: 'email | facebook | telegram',
+    recipient: 'user@example.com',
+    message: 'Test alert'
+  })
+})
+.then(res => res.json())
+.then(console.log)
+.catch(console.error);`,
+
+  'email-php': `<?php
+$url = '${API_URL}';
+$data = [
+  'channel' => 'email | facebook | telegram',
+  'recipient' => 'user@example.com',
+  'message' => 'Test alert'
+];
+$options = [
+  'http' => [
+    'header' => "X-API-Key: your-api-key\\r\\nContent-Type: application/json\\r\\n",
+    'method' => 'POST',
+    'content' => json_encode($data)
+  ]
+];
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+echo $result;
+?>`
+};
+
+//=== INITIALIZE ===//
+document.getElementById('api-endpoint').href = API_URL;
+document.getElementById('api-endpoint').textContent = API_URL;
+hljs.highlightAll();
+
+// Build CodeMirror blocks
+Object.entries(codeExamples).forEach(([id, code]) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.value = code;
+  const mode =
+    id.includes('python') ? 'python' :
+    id.includes('php') ? 'php' :
+    id.includes('js') ? 'javascript' :
+    id.includes('curl') ? 'shell' : 'plaintext';
+  CodeMirror.fromTextArea(el, {
+    mode, theme: 'dracula',
+    lineNumbers: true,
+    readOnly: true,
+    viewportMargin: Infinity
+  });
+});
+
+// Tabs handler
+document.querySelectorAll('.code-tabs').forEach(group => {
+  const buttons = group.querySelectorAll('.tab-button');
+  const editors = group.querySelectorAll('.code-editor');
+  buttons.forEach(btn => btn.addEventListener('click', () => {
+    buttons.forEach(b => b.classList.remove('active'));
+    editors.forEach(ed => ed.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  }));
+});
+</script>
+</body>
+</html>
